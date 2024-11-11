@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 
-const emit=defineEmits(['logeado','solicitarRegistro']);
+const emit=defineEmits(['solicitarRegistro','LoginConExito']);
 
 const sUsuario=ref("");
 const sPassword=ref("");
 
 
-function clicklogin(){
-    emit('logeado');
+function LoginPresionado(){
+    emit('LoginConExito');
 }
 
 function clickregistrar(){
@@ -32,13 +32,8 @@ function clickregistrar(){
             <input type="password" v-model="sPassword">
         </div>
 
-        <div>
-            <label> REPETIR CONTRASEÑA: </label>
-            <input type="password" v-model="sPassword">
-        </div>
 
-
-        <button @click="clicklogin"> LOG IN </button>
+        <button @click="LoginPresionado"> LOG IN </button>
         <button @click="clickregistrar"> REGISTRARSE </button>
     </div>
 
