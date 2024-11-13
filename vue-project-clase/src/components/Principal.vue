@@ -2,6 +2,7 @@
 import {ref} from 'vue';
 import Login from './auth/Login.vue';
 import Register from './auth/Register.vue';
+import Home from './Home/Home.vue';
 
 const blLoginVisible=ref(true);
 const blRegistroVisible=ref(false);
@@ -36,8 +37,8 @@ function LoginOK(){
             <Register v-if="blRegistroVisible" @cancelar="cancelar"></Register>
         </div>
 
-    <div class="appmain" v-if="!blLoginPendiente">
-            <h1> ESTAMOS DENTRO </h1>
+        <div class="appmain" v-if="!blLoginPendiente">
+            <Home>  </Home>
         </div>
 
     </div>
@@ -52,9 +53,6 @@ function LoginOK(){
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 100vh;
-        width: 100vw;
-        background-color: antiquewhite;
     }
 
     .logo{
