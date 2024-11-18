@@ -8,10 +8,32 @@
         {id:4, titulo:"Post4", cuerpo:"Este es el cuerpo del post 4."}
     ]);
 
+    const sNuevoTitulo=ref('');
+    const sNuevoCuerpo=ref('');
+    const sNuevoBotonAg=ref('Agregar');
+
+    function agregarpost(){
+        const idNuevoPost=posts.value.length+1;
+        posts.value.push({
+            id:agregarpost,
+            titulo:sNuevoTitulo.value,
+            cuerpo:sNuevoCuerpo.value });
+            s.sNuevoCuerpo.value='';
+            sNuevoCuerpo.value='';
+    };
+
 
 </script>
 
 <template>
+
+    <h1>HOME</h1>
+
+    <div class="contenedor-form">
+        <input v-model="sNuevoTitulo" placeholder="Titulo"><br>
+        <textarea v-model="sNuevoCuerpo" placeholder="Descripción"></textarea><br>
+        <button @click="agregarpost"> {{ sNuevoBotonAg }} </button>
+    </div>
 
     <div class="contenedor-posts">
         <h1> MIS POSTS SON: </h1>
