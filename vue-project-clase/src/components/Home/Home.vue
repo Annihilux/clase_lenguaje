@@ -1,12 +1,12 @@
 <script setup>
     import { ref } from 'vue';
-    import cascadaimg from '@/assets/cascada.jpg';
+    import cascimg from '@/assets/cascada.jpg';
 
     const posts = ref([
-        {id:1, titulo:"Post1", cuerpo:"Este es el cuerpo del post 1.", imagen: cascadaimg},
-        {id:2, titulo:"Post2", cuerpo:"Este es el cuerpo del post 2.", imagen: cascadaimg},
-        {id:3, titulo:"Post3", cuerpo:"Este es el cuerpo del post 3.", imagen: cascadaimg},
-        {id:4, titulo:"Post4", cuerpo:"Este es el cuerpo del post 4.", imagen: cascadaimg}
+        {id:1, titulo:"Post1", cuerpo:"Este es el cuerpo del post 1.", imagen: cascimg},
+        {id:2, titulo:"Post2", cuerpo:"Este es el cuerpo del post 2.", imagen: cascimg},
+        {id:3, titulo:"Post3", cuerpo:"Este es el cuerpo del post 3.", imagen: cascimg},
+        {id:4, titulo:"Post4", cuerpo:"Este es el cuerpo del post 4.", imagen: cascimg}
     ]);
 
     const sNuevoTitulo=ref('');
