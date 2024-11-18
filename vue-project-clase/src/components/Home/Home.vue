@@ -1,11 +1,12 @@
 <script setup>
     import { ref } from 'vue';
+    import cascadaimg from '@/assets/cascada.jpg';
 
     const posts = ref([
-        {id:1, titulo:"Post1", cuerpo:"Este es el cuerpo del post 1."},
-        {id:2, titulo:"Post2", cuerpo:"Este es el cuerpo del post 2."},
-        {id:3, titulo:"Post3", cuerpo:"Este es el cuerpo del post 3."},
-        {id:4, titulo:"Post4", cuerpo:"Este es el cuerpo del post 4."}
+        {id:1, titulo:"Post1", cuerpo:"Este es el cuerpo del post 1.", imagen: cascadaimg},
+        {id:2, titulo:"Post2", cuerpo:"Este es el cuerpo del post 2.", imagen: cascadaimg},
+        {id:3, titulo:"Post3", cuerpo:"Este es el cuerpo del post 3.", imagen: cascadaimg},
+        {id:4, titulo:"Post4", cuerpo:"Este es el cuerpo del post 4.", imagen: cascadaimg}
     ]);
 
     const sNuevoTitulo=ref('');
@@ -17,7 +18,8 @@
         posts.value.push({
             id:agregarpost,
             titulo:sNuevoTitulo.value,
-            cuerpo:sNuevoCuerpo.value });
+            cuerpo:sNuevoCuerpo.value,
+            imagen:''});
             s.sNuevoCuerpo.value='';
             sNuevoCuerpo.value='';
     };
@@ -38,7 +40,7 @@
     <div class="contenedor-posts">
         <h1> MIS POSTS SON: </h1>
         <div v-for="post in posts" :key="post.id" class="post">
-            <img src="../../assets/logo.svg" alt="Logo" class="logo"/>
+            <img :src="post.imagen" alt="Logo" class="logo"/>
             <h2> {{ post.titulo }} </h2>
             <p> {{ post.cuerpo }} </p>
 
