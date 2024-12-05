@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 
 import { useCurrentUser, useFirebaseAuth } from 'vuefire';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword,sendPasswordResetEmail } from 'firebase/auth';
 
 const emit=defineEmits(['solicitarRegistro','LoginConExito']);
 
@@ -18,22 +18,27 @@ const auth = useFirebaseAuth();
 
 function LoginPresionado(){
     signInWithEmailAndPassword(auth,sUsuario.value,sPassword.value)
-    .then((userCredential) => {
-        const user=userCredential.user;
-        alert("BIEN BIEN");
-        emit('LoginConExito');
-    })
-    .catch((reason)=>
-    {
-        alert("MAL");
-    })
-    
-    //alert("TODO BIEN");
+    .then(loginOK)
+    .catch(loginNOK);
 };
 
 function clickregistrar(){
     emit('solicitarRegistro');
 };
+
+function presionaRecuperar(){
+   sendPasswordResetEmail(auth, sUsuario.value);
+}
+
+function loginOK(userCredential){
+    const user=userCredential.user;
+        alert("BIEN BIEN");
+        emit('LoginConExito');
+}
+
+function loginNOK(reason){
+    alert("MAL");
+}
 
 </script>
 
@@ -43,7 +48,7 @@ function clickregistrar(){
         <h1> LOG IN </h1>
 
         <div>
-            <label> USUARIO: </label>
+            <label> CORREO: </label>
             <input type="text" v-model="sUsuario">
         </div>
 
@@ -55,6 +60,7 @@ function clickregistrar(){
 
         <button @click="LoginPresionado"> LOG IN </button>
         <button @click="clickregistrar"> REGISTRARSE </button>
+        <button @click="presionaRecuperar"> RECUPERAR CONTRASEÑA </button>
     </div>
 
 
