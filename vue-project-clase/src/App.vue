@@ -8,7 +8,6 @@ import Principal from './components/Principal.vue';
 
   <Principal></Principal>
 
-
 </template>
 
 

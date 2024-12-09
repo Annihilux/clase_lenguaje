@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router'; // Para navegar entre vistas
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useFirebaseAuth } from 'vuefire';
+import { sendEmailVerification } from 'firebase/auth';
+import Home from '../Home/Home.vue';
 
 const emit = defineEmits(['cancelar']); // Emitir el evento 'cancelar'
 
@@ -33,10 +35,11 @@ async function clickregistrar() {
     
     // Si el registro es exitoso:
     successMessage.value = "Registro exitoso. Redirigiendo a Home...";
+    sendEmailVerification(auth.currentUser);
     
     // Redirigir a Home.vue después de un breve retraso
     setTimeout(() => {
-      router.push("Home.vue"); // Reemplaza '/home' con la ruta configurada para Home.vue
+      router.push(vue-project-clase/src/components/Home/Home.vue); // Reemplaza '/home' con la ruta configurada para Home.vue
     }, 1500);
   } catch (error) {
     // Manejar errores de Firebase
