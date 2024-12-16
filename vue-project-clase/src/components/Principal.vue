@@ -21,7 +21,7 @@ function cancelar(){
 }
 
 function LoginOK(){
-    blLoginPendiente.value=false;
+    blLoginPendiente.value=false; 
 }
 
 
