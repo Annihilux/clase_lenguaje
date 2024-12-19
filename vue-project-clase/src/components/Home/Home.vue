@@ -2,14 +2,14 @@
     import { ref } from 'vue';
     import cascimg from '@/assets/cascada.jpg';
     //import { db } from '@/firebase';
-    import { doc, collection, getDoc, getDocs } from 'firebase/firestore';
+    import { doc, collection, getDoc, getDocs, setDoc, addDoc } from 'firebase/firestore';
     import { useFirestore } from 'vuefire';
 
     const posts = ref([
-        {id:1, title:"Post1", body:"Este es el cuerpo del post 1.", likes:"75667"},
-        {id:2, title:"Post2", body:"Este es el cuerpo del post 2.", likes:"46456"},
-        {id:3, title:"Post3", body:"Este es el cuerpo del post 3.", likes:"8896"},
-        {id:4, title:"Post4", body:"Este es el cuerpo del post 4.", likes:"23456"}
+        {id:1, title:"Post1", body:"Este es el cuerpo del post 1."},
+        {id:2, title:"Post2", body:"Este es el cuerpo del post 2."},
+        {id:3, title:"Post3", body:"Este es el cuerpo del post 3."},
+        {id:4, title:"Post4", body:"Este es el cuerpo del post 4."}
     ]);
 
     const sNuevoTitulo=ref('');
@@ -18,28 +18,42 @@
     const sNumeroLikes=ref('');
 
     function agregarpost(){
-        const idNuevoPost=posts.value.length+1;
-        posts.value.push({
-            id:agregarpost,
+        const datosNuevoPost={
+            //id:agregarpost,
             title:sNuevoTitulo.value,
             body:sNuevoCuerpo.value,
-            likes:sNumeroLikes.value,
-            imagen:''});
-            s.sNuevoCuerpo.value='';
-            sNuevoCuerpo.value='';
-    };
+            likes:0,
+            imagen:''};
+
+        //const documentoRefPostNuevo=doc(db,"Profiles/manuel1/Posts", ""+Date.now());
+        const collectionRefPosts=collection(db,"Profiles/manuel1/Posts");
+        //setDoc(documentoRefPostNuevo, datosNuevoPost)
+        addDoc(collectionRefPosts,datosNuevoPost)
+        .then(postInsertadoOK)
+        .catch(postInsertadoNOK);
+            //s.sNuevoCuerpo.value='';
+            //sNuevoCuerpo.value='';
+    }
+
+    function postInsertadoOK(docRef){
+        alert("BIEN INSERTADO" +docRef.id) ;
+    }
+
+    function postInsertadoNOK(){
+        alert("BIEN INSERTADO");
+    }
 
     const db=useFirestore();
 
     function DescargarPost(){
-        const docRef=doc(db, "Profiles/miguel1/Posts", "post1");
+        const docRef=doc(db, "Profiles/manuel1/Posts", "post1");
         getDoc(docRef)
         .then(descargaOK)
         .catch(descargaNOK);
     };
 
     function DescargarPosts(){
-        const collectionRef=collection(db, "Profiles/miguel1/Posts");
+        const collectionRef=collection(db, "Profiles/manuel1/Posts");
         getDocs(collectionRef)
         .then(descargaPostsOK)
         .catch(descargaPostsNOK);
