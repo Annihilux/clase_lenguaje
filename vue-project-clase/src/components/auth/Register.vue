@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'; // Para navegar entre vistas
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useFirebaseAuth } from 'vuefire';
+import { useFirebaseAuth,useFirestore } from 'vuefire';
 import { sendEmailVerification } from 'firebase/auth';
 import Home from '../Home/Home.vue';
 
@@ -14,10 +14,34 @@ const errorMessage = ref(""); // Para mostrar errores
 const successMessage = ref(""); // Para mostrar mensajes de éxito
 const router = useRouter(); // Router para redirigir
 const auth = useFirebaseAuth(); // Obtenemos la instancia de Firebase Auth
+const db = useFirestore();
+
+const errorMensaje=ref('');
+const buenMensaje=ref('');
+const sNombreUser=ref('');
 
 function clickcancelar() {
   emit('cancelar');
 }
+
+function crearPerfil(){
+        const datosNuevoPerfil={
+            nombre:sNombreUser.value
+          };
+
+        const collectionRefPerfiles=collection(db,"Profiles");
+        addDoc(collectionRefPerfiles,datosNuevoPerfil)
+        .then(perfilInsertadoOK)
+        .catch(perfilInsertadoNOK);
+    }
+    
+    function perfilInsertadoOK(nuevoPerfilRef){
+        alert("PERFIL INSERTADO: " +nuevoPerfilRef.id) ;
+    }
+
+    function perfilInsertadoNOK(){
+        alert("PERFIL NO INSERTADO");
+    }
 
 async function clickregistrar() {
   errorMessage.value = ""; // Limpiar mensajes de error
@@ -36,6 +60,7 @@ async function clickregistrar() {
     // Si el registro es exitoso:
     successMessage.value = "Registro exitoso. Redirigiendo a Home...";
     sendEmailVerification(auth.currentUser);
+    crearPerfil();
     
     // Redirigir a Home.vue después de un breve retraso
     setTimeout(() => {
@@ -66,6 +91,16 @@ async function clickregistrar() {
     <div>
       <label>CONTRASEÑA:</label>
       <input type="password" v-model="sPasswordRe">
+    </div>
+
+    <div>
+      <label>CONTRASEÑA:</label>
+      <input type="password" v-model="sPasswordRe">
+    </div>
+
+    <div>
+      <label>NOMBRE:</label>
+      <input type="text" v-model="sNombreUser">
     </div>
 
     <!-- Mostrar mensajes de error o éxito -->

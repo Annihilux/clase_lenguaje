@@ -1,7 +1,6 @@
 <script setup>
     import { ref } from 'vue';
     import cascimg from '@/assets/cascada.jpg';
-    //import { db } from '@/firebase';
     import { doc, collection, getDoc, getDocs, setDoc, addDoc } from 'firebase/firestore';
     import { useFirestore } from 'vuefire';
 
@@ -17,6 +16,11 @@
     const sNuevoBotonAg=ref('Agregar');
     const sNumeroLikes=ref('');
 
+    const auth = useFirebaseAuth(); // Obtenemos la instancia de Firebase Auth
+    const db = useFirestore();
+
+
+
     function agregarpost(){
         const datosNuevoPost={
             //id:agregarpost,
@@ -31,8 +35,6 @@
         addDoc(collectionRefPosts,datosNuevoPost)
         .then(postInsertadoOK)
         .catch(postInsertadoNOK);
-            //s.sNuevoCuerpo.value='';
-            //sNuevoCuerpo.value='';
     }
 
     function postInsertadoOK(docRef){
@@ -43,7 +45,6 @@
         alert("BIEN INSERTADO");
     }
 
-    const db=useFirestore();
 
     function DescargarPost(){
         const docRef=doc(db, "Profiles/manuel1/Posts", "post1");
@@ -53,16 +54,14 @@
     };
 
     function DescargarPosts(){
-        const collectionRef=collection(db, "Profiles/manuel1/Posts");
+        const collectionRef=collection(db, "Profiles/"+auth.currentUser.uid+"/Posts");
         getDocs(collectionRef)
         .then(descargaPostsOK)
         .catch(descargaPostsNOK);
     };
 
     function descargaPostsOK(postsDescargados){
-        postsDescargados.forEach((post)=>{
-            posts.value.push(post.data());
-        });
+        posts.value.splice(0,posts.value.length);
     }
 
     function descargaPostsNOK(){
