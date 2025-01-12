@@ -81,7 +81,7 @@
         <h1>REGISTRO</h1>
 
         <div>
-            <label>USUARIO:</label>
+            <label>CORREO:</label>
             <input v-model="sUsuarioRe" type="text"></input>
         </div>
 
