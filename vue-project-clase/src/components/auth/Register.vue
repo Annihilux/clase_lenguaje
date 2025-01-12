@@ -1,117 +1,115 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router'; // Para navegar entre vistas
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useFirebaseAuth,useFirestore } from 'vuefire';
-import { sendEmailVerification } from 'firebase/auth';
-import Home from '../Home/Home.vue';
+    import { ref } from 'vue';
+    import { createUserWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
+    import { useFirebaseAuth,useFirestore } from 'vuefire';
+    import {collection, addDoc, setDoc,doc } from "firebase/firestore";
 
-const emit = defineEmits(['cancelar']); // Emitir el evento 'cancelar'
+    const sUsuarioRe=ref('');
+    const sPasswordRe=ref('');
+    const sRepetirPasswordRe=ref('');
+    const errorMensaje=ref('');
+    const buenMensaje=ref('');
+    const sNombreUser=ref('');
 
-const sUsuarioRe = ref("");
-const sPasswordRe = ref("");
-const errorMessage = ref(""); // Para mostrar errores
-const successMessage = ref(""); // Para mostrar mensajes de éxito
-const router = useRouter(); // Router para redirigir
-const auth = useFirebaseAuth(); // Obtenemos la instancia de Firebase Auth
-const db = useFirestore();
+    const emit=defineEmits(["cambiarALogin"]);
+    const auth=useFirebaseAuth();
+    const db = useFirestore();
 
-const errorMensaje=ref('');
-const buenMensaje=ref('');
-const sNombreUser=ref('');
+    function presioneAceptar(){
+        errorMensaje.value="";
+        buenMensaje.value="";
 
-function clickcancelar() {
-  emit('cancelar');
-}
+        if(!sUsuarioRe.value || !sPasswordRe.value){
+            errorMensaje.value="Porfavor complete todos los campos";
+        }
+        else{
+            createUserWithEmailAndPassword(auth,sUsuarioRe.value,sPasswordRe.value)
+            .then(registerOK)
+            .catch(registerNOK);
+        }
 
-function crearPerfil(){
-        const datosNuevoPerfil={
-            nombre:sNombreUser.value
-          };
+    }
 
-        const collectionRefPerfiles=collection(db,"Profiles");
-        addDoc(collectionRefPerfiles,datosNuevoPerfil)
+    function registerOK(usuarioRegistrado){
+        buenMensaje.value="Registro completado";
+        //sendEmailVerification(auth.currentUser);
+        crearPerfil();
+        
+    }
+
+    function registerNOK(error){
+        
+        if(error=="FirebaseError: Firebase: Error (auth/email-already-in-use)."){
+            alert("USUARIO YA EXISTE, INTENTA LOGEARTE");
+        }
+        else{
+            errorMensaje.value="FALLA POR: "+error;
+        }
+    }
+
+    /**
+     * Funcion que coge los datos del formulario visual y los inserta en la coleccion perfiles
+     * de la base de datos
+     */
+    function crearPerfil(){
+        const profileRef = collection(db, "/Profiles");
+        const postRef=doc(profileRef, auth.currentUser.uid);
+        setDoc(postRef,{nombre:sNombreUser.value})
+        //addDoc(collectionRefPerfiles,datosNuevoPerfil)
         .then(perfilInsertadoOK)
         .catch(perfilInsertadoNOK);
     }
-    
+
     function perfilInsertadoOK(nuevoPerfilRef){
-        alert("PERFIL INSERTADO: " +nuevoPerfilRef.id) ;
+        alert("SE HA INSERTADO CORRECTAMENTE UN PERFIL NUEVO "+nuevoPerfilRef.id);
+        emit("cambiarALogin");
     }
 
-    function perfilInsertadoNOK(){
-        alert("PERFIL NO INSERTADO");
+    function perfilInsertadoNOK(error){
+      alert("Algo no ha ido bien...");
     }
-
-async function clickregistrar() {
-  errorMessage.value = ""; // Limpiar mensajes de error
-  successMessage.value = ""; // Limpiar mensajes de éxito
-
-  // Validar si los campos están vacíos
-  if (!sUsuarioRe.value || !sPasswordRe.value) {
-    errorMessage.value = "Por favor, complete todos los campos.";
-    return;
-  }
-
-  try {
-    // Registrar usuario con Firebase Auth
-    await createUserWithEmailAndPassword(auth, sUsuarioRe.value, sPasswordRe.value);
     
-    // Si el registro es exitoso:
-    successMessage.value = "Registro exitoso. Redirigiendo a Home...";
-    sendEmailVerification(auth.currentUser);
-    crearPerfil();
-    
-    // Redirigir a Home.vue después de un breve retraso
-    setTimeout(() => {
-      router.push(vue-project-clase/src/components/Home/Home.vue); // Reemplaza '/home' con la ruta configurada para Home.vue
-    }, 1500);
-  } catch (error) {
-    // Manejar errores de Firebase
-    if (error.code === "auth/email-already-in-use") {
-      errorMessage.value = "El correo ya está registrado.";
-    } else if (error.code === "auth/weak-password") {
-      errorMessage.value = "La contraseña es demasiado débil.";
-    } else {
-      errorMessage.value = "Error al registrar: " + error.message;
+
+    function presioneCancelar(){
+        emit("cambiarALogin");
     }
-  }
-}
+
 </script>
 
 <template>
-  <div id="contenedor-registro">
-    <h1>REGISTRAR</h1>
+    <div id="contenedor-registro">
+        <h1>REGISTRO</h1>
 
-    <div>
-      <label>CORREO:</label>
-      <input type="text" v-model="sUsuarioRe">
+        <div>
+            <label>USUARIO:</label>
+            <input v-model="sUsuarioRe" type="text"></input>
+        </div>
+
+        <div>
+            <label>PASSWORD:</label>
+            <input v-model="sPasswordRe" type="password"></input>
+        </div>
+
+        <div>
+            <label>REPETIR PASSWORD:</label>
+            <input v-model="sRepetirPasswordRe" type="password"></input>
+        </div>
+
+        <div>
+            <label>NOMBRE:</label>
+            <input v-model="sNombreUser" type="text"></input>
+        </div>
+
+        <button @click="presioneAceptar">ACEPTAR</button>
+        <button @click="presioneCancelar">CANCELAR</button>
+
+        <label>{{ errorMensaje }}</label>
+        <label>{{ buenMensaje }}</label>
     </div>
-
-    <div>
-      <label>CONTRASEÑA:</label>
-      <input type="password" v-model="sPasswordRe">
-    </div>
-
-    <div>
-      <label>CONTRASEÑA:</label>
-      <input type="password" v-model="sPasswordRe">
-    </div>
-
-    <div>
-      <label>NOMBRE:</label>
-      <input type="text" v-model="sNombreUser">
-    </div>
-
-    <!-- Mostrar mensajes de error o éxito -->
-    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-    <p v-if="successMessage" style="color: green;">{{ successMessage }}</p>
-
-    <button @click="clickregistrar">REGISTRAR</button>
-    <button @click="clickcancelar">CANCELAR</button>
-  </div>
 </template>
 
 <style scoped>
-/* Puedes añadir estilos aquí */
+    #contenedor-registro{
+        background-color:bisque;
+    }
 </style>
