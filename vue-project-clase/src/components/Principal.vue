@@ -33,8 +33,8 @@ function LoginOK(){
         <h1> {{sTitulo}} </h1>
         <img src="../assets/logo.svg" alt="Logo" class="logo" v-if="blLoginPendiente"/>
         <div class="loginregister" v-if="blLoginPendiente">
-            <Login v-if="blLoginVisible" @solicitarRegistro="mostrarRegistro" @cancelar="cancelar" @LoginConExito="LoginOK"></Login>
-            <Register v-if="blRegistroVisible" @cancelar="cancelar"></Register>
+            <Login v-if="blLoginVisible" @solicitarRegistro="mostrarRegistro" @LoginConExito="LoginOK"></Login>
+            <Register v-if="blRegistroVisible" @cambiarALogin="cancelar"></Register>
         </div>
 
         <div class="appmain" v-if="!blLoginPendiente">

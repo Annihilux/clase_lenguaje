@@ -10,7 +10,7 @@
     const errorMensaje=ref('');
     const buenMensaje=ref('');
     const sNombreUser=ref('');
-
+    
     const emit=defineEmits(["cambiarALogin"]);
     const auth=useFirebaseAuth();
     const db = useFirestore();
@@ -52,7 +52,7 @@
      * de la base de datos
      */
     function crearPerfil(){
-        const profileRef = collection(db, "/Profiles");
+        const profileRef = collection(db, "Profiles/");
         const postRef=doc(profileRef, auth.currentUser.uid);
         setDoc(postRef,{nombre:sNombreUser.value})
         //addDoc(collectionRefPerfiles,datosNuevoPerfil)
@@ -98,6 +98,11 @@
         <div>
             <label>NOMBRE:</label>
             <input v-model="sNombreUser" type="text"></input>
+        </div>
+
+        <div>
+            <label>FOTO DE PERFIL:   </label>
+            <input type="file"></input>
         </div>
 
         <button @click="presioneAceptar">ACEPTAR</button>
