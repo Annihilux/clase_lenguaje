@@ -7,6 +7,7 @@ import Home from './Home/Home.vue';
 const blLoginVisible=ref(true);
 const blRegistroVisible=ref(false);
 const blLoginPendiente=ref(true);
+const drawer=ref(false);
 
 
 
@@ -25,11 +26,12 @@ function LoginOK(){
 }
 
 
+
 </script>
 
 <template>
-  
-    <div class="contenedor">
+
+    <div id="contenedor_principal">
         <h1> {{sTitulo}} </h1>
         <img src="../assets/logo.svg" alt="Logo" class="logo" v-if="blLoginPendiente"/>
         <div class="loginregister" v-if="blLoginPendiente">
@@ -40,16 +42,15 @@ function LoginOK(){
         <div class="appmain" v-if="!blLoginPendiente">
             <Home>  </Home>
         </div>
-
+        
     </div>
-
     
-
 </template>
 
 <style scoped>
 
-    .contenedor{
+    #contenedor_principal{
+        background-color: rgb(193, 213, 255);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -59,5 +60,7 @@ function LoginOK(){
         width: 180px;
         height: auto;
     }
+
+    
 
 </style>

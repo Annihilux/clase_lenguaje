@@ -58,10 +58,14 @@ function loginNOK(reason){
         </div>
 
 
-        <button @click="LoginPresionado"> LOG IN </button>
-        <button @click="clickregistrar"> REGISTRARSE </button>
-        <button @click="presionaRecuperar"> RECUPERAR CONTRASEÑA </button>
+        <v-btn @click="LoginPresionado"> <v-icon icon="mdi-login"> </v-icon> LOG IN </v-btn><br><br>
+        <v-btn @click="clickregistrar"> REGISTRARSE </v-btn><br><br>
+        <v-btn @click="presionaRecuperar"> RECUPERAR CONTRASEÑA </v-btn>
+
+        <v-chip closable></v-chip>
     </div>
+
+    
 
 
 
